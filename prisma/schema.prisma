@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model employees {
+  id         String    @id @default(cuid())
+  first_name String? @db.VarChar(50)
+  last_name  String? @db.VarChar(50)
+  email      String? @db.VarChar(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  username String @unique
+  password String
+  token String?
+  tokenExpiracy DateTime?
+  isVerified Boolean @default(false)
+  verificationDate DateTime?
+}
+model OAuthUser{
+  id String @id @default(cuid())
+  name String 
+  email String  @unique
+  provider String
+  refreshToken String?
+  accessToken String?
+  tokenExpiry DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+model currency {
+  id         String     @id @default(cuid())
+  name String? @db.VarChar(50)
+  store_name String? @db.VarChar(50)
+  state    String? @db.VarChar(50)
+  city     String? @db.VarChar(50)
+  sale_price Float?  @default(0)
+  purchase_price Float? @default(0)
+  date  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  bulletin bulletin[]
+}
+model store {
+  id         String     @id @default(cuid())
+  name String? @db.VarChar(50)
+  state String? @db.VarChar(50)
+  city String? @db.VarChar(50)
+  address String? @db.VarChar(50)
+  email      String? @db.VarChar(100)
+  phone      String? @db.VarChar(100)
+  currencies   String? @db.VarChar(100)
+  bulletin bulletin[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+model offer {
+ id         String    @id @default(cuid())
+ currency  String? @db.VarChar(100)
+ price     Float?
+ date      DateTime? 
+ createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+model bulletin {
+  id         String     @id @default(cuid())
+  store store?  @relation(fields: [storeid], references: [id])
+ storeid String?
+  date      DateTime?
+  state String? @db.VarChar(50)
+  city String? @db.VarChar(50)
+  products currency[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+model price {
+  id         String     @id @default(cuid())
+  name      String
+  date      DateTime?
+  sale_price     Float @default(0)
+  sale_std    Float @default(0)
+  purchase_price Float @default(0)
+  purchase_std Float @default(0)
+  sale_percentageChange  Float? @default(0)
+  purchase_percentageChange  Float? @default(0)
+  max_sale_price Float? @default(0)
+  min_sale_price Float? @default(0)
+  max_purchase_price Float? @default(0)
+  min_purchase_price Float? @default(0)
+  state String? @db.VarChar(50)
+  city String? @db.VarChar(50)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+}

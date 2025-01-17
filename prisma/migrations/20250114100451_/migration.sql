@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `price` ADD COLUMN `purchase_std` DOUBLE NOT NULL DEFAULT 0,
+    ADD COLUMN `sale_std` DOUBLE NOT NULL DEFAULT 0;

@@ -24,17 +24,19 @@ model User {
   tokenExpiracy DateTime?
   isVerified Boolean @default(false)
   verificationDate DateTime?
+  type String @default("customer")
 }
 model OAuthUser{
   id String @id @default(cuid())
   name String 
   email String  @unique
   provider String
-  refreshToken String?
-  accessToken String?
+  refreshToken String? @db.Text
+  accessToken String? @db.Text    
   tokenExpiry DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  type String @default("customer")
 }
 model currency {
   id         String     @id @default(cuid())
@@ -51,6 +53,7 @@ model currency {
 }
 model store {
   id         String     @id @default(cuid())
+  userID     String?
   name String? @db.VarChar(50)
   state String? @db.VarChar(50)
   city String? @db.VarChar(50)

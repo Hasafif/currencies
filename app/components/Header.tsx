@@ -1,6 +1,6 @@
 import { pages } from "@/app/components/config/headerConfig";
 import styles from "./styles/header.module.css";
-import { getSession } from "@/app/lib/auth";
+
 import { HeaderAccountPanel } from "./HeaderAccountPanel";
 import { Suspense } from "react";
 export default function Header() {

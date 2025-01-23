@@ -17,12 +17,24 @@ export default function RegisterForm() {
     password: "",
     email: "",
     passwordC: "",
+    store_name: "",
+    type: "",
+    state:"",
+    city:"",
+    phone:"",
+    address:""
   });
   const [formData, setFormData] = useState<formData>({
-    email: "",
     username: "",
     password: "",
+    email: "",
     passwordC: "",
+    store_name: "",
+    type: "customer",
+    state:"",
+    city:"",
+    phone:"",
+    address:""
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,8 +61,8 @@ export default function RegisterForm() {
         showMsg(resp.message,'error')
       }
       
-    } catch (err: any) {
-      console.log(`Error:${err.message}`);
+    } catch (err) {
+      console.log(`Error:${err}`);
     }
   };
   const handleBlur = async () => {
@@ -128,6 +140,7 @@ export default function RegisterForm() {
             />
             <p className={styles.invalidInput}>{errorMsg.passwordC}</p>
           </div>
+          
           <button className={styles.submitBtn} type="submit">
             Register
           </button>
@@ -135,6 +148,12 @@ export default function RegisterForm() {
             Already have an account?{" "}
             <a className={styles.switchLink} href="/auth/login">
               log in here
+            </a>
+          </p>
+          <p className={styles.switchText}>
+            Share your prices now {" "}
+            <a className={styles.switchLink} href="/auth/register_store">
+              register as a store
             </a>
           </p>
         </form>

@@ -41,11 +41,15 @@ const BulletinForm = () => {
   };
 
   const handleStoreInfoChange = (e:any) => {
-    const { name, value } = e.target;
-    setStoreInfo(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    if (e.target) {
+
+      const { name, value } = e.target;
+      setStoreInfo(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+   
   };
 
   const handleProductChange = (id:number, field:any, value:any) => {
@@ -91,7 +95,7 @@ const BulletinForm = () => {
       newErrors.storeInfo.city = 'City is required';
     }
 
-    let price:Price[] = [];
+    const price:Price[] = [];
     prices.map(p=>{if (p.state==storeInfo.state && p.city==storeInfo.city) 
       {price.push(p); console.log(p)}})
     console.log(prices);
@@ -133,7 +137,7 @@ const BulletinForm = () => {
     if (validateForm()) {
       const bulletinData = {
         ...storeInfo,
-        products: products.map(({ id, ...product }) => ({
+        products: products.map(({ ...product }) => ({
           ...product,
           sale_price: parseFloat(product.sale_price),
           purchase_price: parseFloat(product.purchase_price)

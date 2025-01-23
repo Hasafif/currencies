@@ -1,6 +1,6 @@
 "use client";
 import RegisterForm from "@/app/components/Auth/RegisterForm";
-import { MsgProvider } from "@/context/MsgContext";
+
 import { Suspense } from "react";
 
 export default function Page() {

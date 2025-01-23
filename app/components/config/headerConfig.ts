@@ -9,7 +9,8 @@ export const pages:link[] = [
   {name:"Bulletins",link:"/bulletins"},
   {name:"Prices",link:"/prices"},
   {name:"Currencies",link:"/currencies"},
-  {name:"Offers",link:"/offers"},
+  {name:"Cryptocurrencies",link:"/cryptocurrencies"},
+  {name:"Metals",link:"/metals"},
 
 
 ]

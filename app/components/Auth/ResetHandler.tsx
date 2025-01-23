@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/components/styles/auth.module.css";
+import styles from "@/app/components/styles/auth.module.css";
 import { checkToken, resetPassword } from "../../lib/auth";
 import {useEffect, useState } from "react";
 import { useMsg } from "@/context/MsgContext";

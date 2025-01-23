@@ -1,21 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-//import Ho from './components/mo';
-import Navbar from "@/app/components/navbar";
+
 import DataTable from "../components/DataTable";
 import axios from "axios";
-import { socket } from "../../socket";
-import { io, Socket } from "socket.io-client";
+
 import { showToast } from "../components/Notification/Toast";
-//import { getSession } from '../lib/auth';
-//import { redirect } from 'next/navigation';
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-  createdAt: string;
-}
+import { Column } from "./User_DataTable";
+
+
+
 interface currency {
   id: string;
   name: string;
@@ -55,31 +48,33 @@ interface Store {
 export interface Price {
   id: string;
   name: string;
-  date: Date;
+  date?: Date;
   sale_price: GLfloat;
   sale_std: GLfloat;
   purchase_price: GLfloat;
   purchase_std: GLfloat;
-  max_sale_price: GLfloat;
-  max_purchase_price: GLfloat;
-  min_sale_price: GLfloat;
-  min_purchase_price: GLfloat;
-  state: string;
-  city: string;
+  max_sale_price?: GLfloat;
+  max_purchase_price?: GLfloat;
+  min_sale_price?: GLfloat;
+  min_purchase_price?: GLfloat;
+  sale_percentageChange?: GLfloat;
+  purchase_percentageChange?: GLfloat;
+  state?: string;
+  city?: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 // Column definitions
-const columns: any[] = [
+const columns: Column[] = [
   { key: "id", label: "ID", type: "string", sortable: true },
   { key: "name", label: "name", type: "string", sortable: true },
   { key: "date", label: "Date", type: "datetime", sortable: true },
-  { key: "sale_price", label: "Sale_Price", type: "Float", sortable: true },
+  { key: "sale_price", label: "Sale_Price", type: "number", sortable: true },
   {
     key: "purchase_price",
     label: "Purchase_Price",
-    type: "Float",
+    type: "number",
     sortable: true,
   },
   { key: "state", label: "State", type: "string", sortable: true },
@@ -93,9 +88,8 @@ export default function Prices() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setsearch] = useState(false);
   const [pricename, setPricename] = useState("");
-  const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
-  //const session = await getSession();
+  
+  
   //const [socket_state, setSocket_state] = useState('try connecting...');
   //const [socket, setSocket] = useState(null);
 
@@ -135,7 +129,7 @@ export default function Prices() {
     }
   };
 
-  const handleSort = (key: string, direction: any) => {
+  const handleSort = () => {
     // Handle sort logic
   };
 
@@ -157,7 +151,7 @@ export default function Prices() {
       setIsLoading(false);
     };
     getbulletins();
-  }, []);
+  }, [prices,setPrices]);
   useEffect(() => {
     if (search) {
       setsearch(true);
@@ -175,7 +169,7 @@ export default function Prices() {
         console.log(filteredPrices);
       }
     }
-  }, [setPricename, pricename, setsearch, search]);
+  }, [setPricename, pricename, setsearch, search,prices]);
   /*useEffect(() => {
       const socket: Socket = io();
       socket.on('updates', (updates:any) => {

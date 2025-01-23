@@ -10,15 +10,9 @@ const BasicStoreForm = () => {
     email: "",
     phone: "",
   });
-  const [storeInfo, setStoreInfo] = useState({
-    storeName: "",
-    state: "",
-    city: "",
-  });
 
-  const [store, setstore] = useState(false);
-  const [bulletin, setbulletin] = useState(false);
-  const [offer, setoffer] = useState(false);
+
+
   const [errors, setErrors] = useState({
     storeName: "",
     state: "",
@@ -132,22 +126,7 @@ const BasicStoreForm = () => {
     }
   };
 
-  const handle_select = (option: any) => {
-    const { name, value } = option.target;
-    if (value == "Store") {
-      setstore(true);
-      setbulletin(false);
-      setoffer(false);
-    } else if (value == "Bulletin") {
-      setbulletin(true);
-      setstore(false);
-      setoffer(false);
-    } else if (value == "Offer") {
-      setoffer(true);
-      setstore(false);
-      setbulletin(false);
-    }
-  };
+ 
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -174,12 +153,6 @@ const BasicStoreForm = () => {
       <h2 style={{ textAlign: "center", marginBottom: "20px", color: "black" }}>
         Store Information
       </h2>
-      {/*<select defaultValue=".." onChange={handle_select}>
-      <option value='..'>..</option>
-        <option value='Store'>Store</option>
-        <option value='Bulletin'>Bulletin</option>
-        <option value='Offer'>Offer</option>
-      </select> */}
       <form
         onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column", gap: "15px" }}

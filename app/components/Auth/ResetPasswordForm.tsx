@@ -1,12 +1,12 @@
 "use client";
-import styles from "@/components/styles/auth.module.css";
+import styles from "@/app/components/styles/auth.module.css";
 //import { sendPasswordResetMail } from "../../lib/mail";
 import { useState } from "react";
-import { useMsg } from "@/context/MsgContext";
+
 import Captcha from "./Recaptcha";
 
 export function ResetPaswordForm() {
-  const { showMsg } = useMsg();
+
   const [email, setEmail] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

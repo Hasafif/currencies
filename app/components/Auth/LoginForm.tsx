@@ -2,15 +2,15 @@
 
 import styles from "../styles/auth.module.css";
 import { login } from "../../lib/auth";
-import { formData } from "../../lib/types";
+import {loginformData } from "../../lib/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import GoogleProvider from "./providers/GoogleProvider";
+
 
 export default function LoginForm() {
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState("");
-  const [formData, setFormData] = useState<formData>({
+  const [formData, setFormData] = useState<loginformData>({
     username: "",
     password: "",
   });
@@ -32,8 +32,8 @@ export default function LoginForm() {
         setErrorMsg(resp.message);
       }
       console.log(resp);
-    } catch (err: any) {
-      console.log(`Error:${err.message}`);
+    } catch (err) {
+      console.log(`Error:${err}`);
     }
   };
   return (

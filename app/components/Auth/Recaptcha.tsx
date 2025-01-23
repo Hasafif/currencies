@@ -1,6 +1,6 @@
 "use client"
 import { checkReCAPTCHA } from "../../lib/auth";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 type RecaptchaProps = {

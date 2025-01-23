@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import Card  from '@/app/components/ui/card';
 import axios from 'axios';
+import { Price } from './prices';
 
 // Type definitions
 interface CurrencyPrice {
@@ -54,8 +55,8 @@ const CurrencyPriceComponent = () => {
     try {
       const response = await axios.post('/api/stores',{type:'prices'});
       const data = await response.data.prices;
-      const prices_now: any =  []
-      for (let p of data) {
+      const prices_now: CurrencyPrice[] =  []
+      for (const p of data) {
        prices_now.push({
         id:p.id,
         name:p.name,

@@ -1,8 +1,18 @@
 export interface formData {
   username: string;
   password: string;
+  type: string;
   email?: string;
   passwordC?:string;
+  store_name?: string;
+  state?: string;
+  city?: string;
+  address?: string;
+  phone?: string
+}
+export interface loginformData {
+  username: string;
+  password: string;
 }
 export type MsgType = 'success' | 'error' | 'info';
 export interface MsgProps {

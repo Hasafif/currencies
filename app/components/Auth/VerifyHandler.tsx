@@ -3,7 +3,7 @@ import { useMsg } from "@/context/MsgContext";
 import { refreshUserToken, verifyUser } from "../../lib/auth";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import styles from "@/components/styles/auth.module.css";
+import styles from "@/app/components/styles/auth.module.css";
 export default function VerifyHandler() {
   const [isTokenExpired, setExpiredStatus] = useState(false);
   const searchParams = useSearchParams();

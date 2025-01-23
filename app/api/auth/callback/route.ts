@@ -1,8 +1,8 @@
 import { googleProvider } from "@/config/config";
-import { encrypt } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { encrypt } from "@/app/lib/auth";
+import { db } from "@/app/lib/db";
 import axios from "axios";
-import { STATUS_CODES } from "http";
+
 import { cookies } from "next/headers";
 
 async function handler(req: Request) {
@@ -102,14 +102,14 @@ async function handler(req: Request) {
       }
     }
     const session = await encrypt({
-      user: { username: userInfo.name, email: userInfo.email ,type:'oauth2'},
+      user: { username: userInfo.name, email: userInfo.email ,type:'customer'},
       expires,
     });
-    cookies().set("session", session, { expires, httpOnly: true });
+    (await cookies()).set("session", session, { expires, httpOnly: true });
     
     return Response.redirect('http://localhost:3000/');
-  } catch (error: any) {
-    return Response.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return Response.json({ error: error }, { status: 500 });
   }
 }
 

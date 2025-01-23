@@ -8,11 +8,8 @@ async function handler(req: NextRequest) {
   if(!name || !state || !city || !phone || !email || !address){
     return NextResponse.json({message:'Invalid parameters'},{status:400})
   }
-       //let k = db.store.findMany({ where: {name:name},
-        //select: {
-        //  name: true
-        //},});
-        //if (k) 
+
+     
       const refcite = await db.store.create({
         data:{
         name:name,
@@ -20,7 +17,8 @@ async function handler(req: NextRequest) {
         city:city,
         phone:phone,
         email:email,
-        address:address
+        address:address,
+        //userID:session
         }
       })
       if(refcite)return NextResponse.json({ok:true},{status:200})

@@ -3,9 +3,9 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus, Trash2, S
 
 // Define generic type for table data
 type SortDirection = 'asc' | 'desc' | null;
-type ColumnType = 'string' | 'number' | 'datetime';
+type ColumnType = 'string' | 'number' | 'datetime' | 'Store' | 'currency []' | 'bulletin []' | 'bulletin';
 
-interface Column {
+export interface Column {
   key: string;
   label: string;
   type: ColumnType;
@@ -25,7 +25,7 @@ interface TableProps<T> {
   isSearching?: boolean;
 }
 
-export default function DataTable<T extends { id: string }>({
+export default function DataTable<T extends { id: string}>({
   columns,
   data,
   filtered_data,
@@ -74,9 +74,9 @@ export default function DataTable<T extends { id: string }>({
   };
 
   const isMobile = windowWidth < 640;
-  const isTablet = windowWidth < 1024;
+ 
 
-  const formatValue = (value: any, type: ColumnType) => {
+  const formatValue = (value: number|string, type: ColumnType) => {
     if (value === null || value === undefined) return '-';
     
     switch (type) {

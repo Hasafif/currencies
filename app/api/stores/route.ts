@@ -1,11 +1,13 @@
 
+import { Price } from "@/app/components/prices";
+import { getCoins } from "@/app/lib/actions";
 import { db } from "@/app/lib/db";
 import { NextRequest,NextResponse } from "next/server";
 const get_last = async ()=> {
     let prices:any[] = [],i=0;
-    let now = new Date();
+    const now = new Date();
     let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
     while(prices.length==0 && i<6) {
       console.log(prices)
       prices = await db.price.findMany({where:{
@@ -28,9 +30,7 @@ async function handler(req: NextRequest) {
   if(!type){
     return NextResponse.json({message:'Invalid parameters'},{status:400})
   }
-  let  now = new Date();
-  let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  let endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
         if (type=='stores') {
             stores = await db.store.findMany()
             console.log(stores);

@@ -1,13 +1,19 @@
 
 import { db } from "@/app/lib/db";
-import { Price } from "@/app/prices/page";
+import { Price } from "@/app/components/prices";
 import { NextRequest,NextResponse } from "next/server";
-
+import { number } from "zod";
+interface mean {
+  sale_mean:number;
+    purchase_mean:number;
+    sale_stdDev:number;
+    purchase_stdDev:number;
+}
 const get_last = async (name:string,state:string,city:string)=> {
   let prices:any[] = [],i=0;
-  let now = new Date();
+  const now = new Date();
   let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  let endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
   while(prices.length==0 && i<6) {
     console.log(prices)
   prices = await db.price.findMany({where:{
@@ -27,7 +33,7 @@ return prices;
 }
 const calculate_mean = (prices:any)=> {
   let sale_mean=0,sum1 = 0,purchase_mean=0,sum2=0,sale_stdDev=0,purchase_stdDev=0;
-  for (let p of prices) {
+  for (const p of prices) {
 sum1= sum1+p.sale_price;
 sum2= sum2+p.purchase_price;
   }
@@ -36,7 +42,7 @@ purchase_mean = sum2/prices.length;
 // Calculate variance
 const sale_variance = prices.reduce((acc:any, curr:any) => 
   acc + Math.pow(curr.sale_price - sale_mean, 2), 0) / prices.length;
-const purchase_variance = prices.reduce((acc:any, curr:any) => 
+const purchase_variance = prices.reduce((acc:any, curr:any)=> 
   acc + Math.pow(curr.purchase_price - sale_mean, 2), 0) / prices.length;
 // Calculate standard deviation
 sale_stdDev = Math.sqrt(sale_variance);
@@ -46,7 +52,7 @@ console.log(purchase_stdDev);
   return {sale_mean:sale_mean,purchase_mean:purchase_mean,sale_stdDev:sale_stdDev,purchase_stdDev:purchase_stdDev};
 
 }
-const calculate_limits = (mean:any,sale_std:number,purchase_std:number)=> {
+const calculate_limits = (mean:mean,sale_std:number,purchase_std:number)=> {
   let max_purchase_price,max_sale_price,min_sale_price,min_purchase_price;
   if (sale_std!=0) {
     max_sale_price = Number((mean.sale_mean+(2*sale_std)).toFixed(2));
@@ -93,10 +99,9 @@ async function handler(req: NextRequest) {
         const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
         let currency,date,all,mean,price,prices,sale_percentageChange,
-        purchase_percentageChange,purchase_std,sale_std,max_purchase_price,
-        max_sale_price,min_sale_price,min_purchase_price,limits;
-        let products = []
-        for (let c of currencies) {
+        purchase_percentageChange,purchase_std,sale_std,limits;
+        const products = []
+        for (const c of currencies) {
           console.log(c);
             date = new Date();
           currency = await db.currency.create({

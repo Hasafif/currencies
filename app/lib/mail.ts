@@ -1,10 +1,6 @@
-"use server";
 
-import settings from "@/config/settings";
-//import { Resend } from "resend";
-import { db } from "./db";
-import { generateSecureKey } from "./utils";
-import { commonResponse } from "./types";
+
+
 //const resend = new Resend('re_2PdPD2Z7_P22aWom7f9YiPwEtJLFZBfuU');
 /*
 export async function sendVerificationMail(

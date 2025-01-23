@@ -1,7 +1,7 @@
 export const googleProvider = {
   credentials: {
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
   },
   urls: {
     redirect_uri: "http://localhost:3000/api/auth/callback",

@@ -2,7 +2,7 @@
 
 import styles from "@/app/components/styles/auth.module.css";
 import { checkToken, resetPassword } from "../../lib/auth";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMsg } from "@/context/MsgContext";
 import { useRouter } from "next/navigation";
 import Captcha from "./Recaptcha";
@@ -43,7 +43,7 @@ export default function ResetHandler({ email, token }: props) {
       showMsg(res.message, "info");
     }
     check();
-  }, []);
+  });
   return (
     <>
       {!validToken ? (

@@ -1,47 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-//import Ho from './components/mo';
 import DataTable from "../components/DataTable";
 import axios from "axios";
 import BulletinForm from "../components/BulletinForm";
 import { showToast } from "../components/Notification/Toast";
 import {Column} from "../components/DataTable";
-interface currency {
-  id: string;
-  name: string;
-  store_name: string;
-  state: string;
-  city: string;
-  sale_price: GLfloat;
-  purchase_price: GLfloat;
-  date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  bulletin: bulletin[];
-}
-interface bulletin {
-  id: string;
-  store: Store;
-  storeid: string;
-  date: Date;
-  state: string;
-  city: string;
-  products: currency[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-interface Store {
-  id: string;
-  name: string;
-  state: string;
-  city: string;
-  address: string;
-  email: string;
-  phone: string;
-  currencies: string;
-  bulletin: bulletin[];
-  createdAt: Date;
-}
+import { bulletin } from "../lib/types";
+
+
+
 // Column definitions
 const columns: Column[] = [
   { key: "id", label: "ID", type: "string", sortable: true },

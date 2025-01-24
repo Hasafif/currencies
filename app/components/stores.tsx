@@ -6,42 +6,8 @@ import axios from 'axios';
 import BasicStoreForm from '../components/StoreForm';
 import { showToast } from '../components/Notification/Toast';
 import { Column } from './User_DataTable';
+import { Store } from '../lib/types';
 
-  interface currency {
-    id: string;
-    name: string;
-    store_name: string;
-    state: string;
-    city: string;
-    price: GLfloat;
-    date: Date;
-    createdAt: Date;
-    updatedAt: Date;
-    bulletin: bulletin[];
-  }
-interface bulletin {
-    id: string;
-  store: Store;
- storeid: string
-  date: Date;
-  state: string;
-  city: string;
-  products: currency[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-  interface Store {
-    id: string;
-    name: string;
-    state: string;
-    city: string;
-    address: string
-    email: string
-    phone: string
-    currencies: string
-    bulletin: bulletin[]
-    createdAt: Date;
-  }
   // Column definitions
   const columns: Column[] = [
     { key: 'id', label: 'ID', type: 'string', sortable: true },

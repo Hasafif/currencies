@@ -3,7 +3,13 @@ import { db } from "./db";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
-import { formData, verifyResponse, commonResponse, loginformData } from "./types";
+import {
+  formData,
+  verifyResponse,
+  commonResponse,
+  loginformData,
+  Payload,
+} from "./types";
 import settings from "@/config/settings";
 import { hash, compare } from "bcryptjs";
 import { z } from "zod";
@@ -11,11 +17,10 @@ import axios from "axios";
 import { googleProvider, reCAPTCHA } from "@/config/config";
 //import { sendPasswordResetMail, sendVerificationMail } from "./mail";
 import { generateSecureKey } from "@/app/lib/utils";
-import { ExecException } from "node:child_process";
 
 // Auth configuration
 
-const secret = "g6_kg5GSGHd52fGDgdN5BVx53KHF20gX";
+const secret = "sec_kg5GSGHd52fGDgdN5BVx53KHF20gX";
 const key = new TextEncoder().encode(secret);
 
 const passwordSchema = z
@@ -25,8 +30,12 @@ const passwordSchema = z
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
   .min(8, "Password must contain at least 8 characters");
-  const phoneSchema = z.string()
-  .regex(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,"Valid phone number is required (XXX-XXX-XXXX)");
+const phoneSchema = z
+  .string()
+  .regex(
+    /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+    "Valid phone number is required (XXX-XXX-XXXX)"
+  );
 const StoreSchema = z
   .object({
     username: z.string().min(4, "Username must be at least 4 characters"),
@@ -43,7 +52,7 @@ const StoreSchema = z
     message: "Passwords didn't match",
     path: ["passwordC"],
   });
-  const UserSchema = z
+const UserSchema = z
   .object({
     username: z.string().min(4, "Username must be at least 4 characters"),
     email: z.string().email("Invalid email format"),
@@ -56,7 +65,7 @@ const StoreSchema = z
   });
 // To encrypt and Descrypt JWT for sessions
 
-export async function encrypt(payload: any) {
+export async function encrypt(payload: Payload): Promise<string> {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -64,11 +73,11 @@ export async function encrypt(payload: any) {
     .sign(key);
 }
 
-export async function decrypt(encryptedInput: string): Promise<any> {
+export async function decrypt(encryptedInput: string): Promise<Payload> {
   const { payload } = await jwtVerify(encryptedInput, key, {
     algorithms: ["HS256"],
   });
-  return payload;
+  return payload as Payload;
 }
 
 // Session Management functions
@@ -77,9 +86,9 @@ export async function updateSession(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return;
   const parsed = await decrypt(session);
-  if (parsed.type === "oauth2") {
+  if (parsed.user.type === "oauth2") {
     try {
-      const refresh = await refreshAccessToken(parsed.email);
+      const refresh = await refreshAccessToken(parsed.user.email);
       if (!refresh.refreshed) await logout();
     } catch (err) {
       return Response.json({ error: "Error: " + err }, { status: 400 });
@@ -104,7 +113,9 @@ export async function getSession() {
 
 // Main Authentication functions
 
-export const login = async (formData: loginformData): Promise<commonResponse> => {
+export const login = async (
+  formData: loginformData
+): Promise<commonResponse> => {
   if (!formData.username || !formData.password) {
     return {
       success: false,
@@ -120,7 +131,7 @@ export const login = async (formData: loginformData): Promise<commonResponse> =>
       password: true,
       //isVerified: true,
       email: true,
-      type:true
+      type: true,
     },
   });
   if (!userExists) return { success: false, message: "User not Found" };
@@ -136,7 +147,7 @@ export const login = async (formData: loginformData): Promise<commonResponse> =>
       username: formData.username,
       password: formData.password,
       email: userExists.email,
-      type:userExists.type,
+      type: userExists.type,
     },
     expires,
   });
@@ -145,7 +156,12 @@ export const login = async (formData: loginformData): Promise<commonResponse> =>
 };
 
 export const register = async (formData: formData): Promise<commonResponse> => {
-  if (!formData.username || !formData.password || !formData.email || !formData.type) {
+  if (
+    !formData.username ||
+    !formData.password ||
+    !formData.email ||
+    !formData.type
+  ) {
     return {
       success: false,
       message: "Either type,username,email or password is not provided",
@@ -156,13 +172,13 @@ export const register = async (formData: formData): Promise<commonResponse> => {
   const usernameExists = await db.user.findUnique({
     where: {
       username: formData.username,
-      type:formData.type
+      type: formData.type,
     },
   });
   const emailExists = await db.user.findUnique({
     where: {
       email: formData.email,
-      type:formData.type
+      type: formData.type,
     },
   });
 
@@ -182,7 +198,7 @@ export const register = async (formData: formData): Promise<commonResponse> => {
       password: hashedPassword,
       token: token,
       tokenExpiracy: tokenExpiry,
-      type:formData.type
+      type: formData.type,
     },
   });
   if (!newUser) return { success: false, message: "Database error" };
@@ -193,20 +209,21 @@ export const register = async (formData: formData): Promise<commonResponse> => {
     formData.username
   );
   console.log(verifyEmail);*/
-  if (formData.type=='store') {
-     newStore = await db.store.create({
-      data:{
-      name:formData.store_name,
-      state:formData.state,
-      city:formData.city,
-      phone:formData.phone,
-      email:formData.email,
-      address:formData.address,
-      userID:newUser.id
-      }
-    })
+  if (formData.type == "store") {
+    newStore = await db.store.create({
+      data: {
+        name: formData.store_name,
+        state: formData.state,
+        city: formData.city,
+        phone: formData.phone,
+        email: formData.email,
+        address: formData.address,
+        userID: newUser.id,
+      },
+    });
   }
-  if (formData.type=='store' && !newStore) return { success: false, message: "Database error" };
+  if (formData.type == "store" && !newStore)
+    return { success: false, message: "Database error" };
   return { success: true, message: "user registered" };
 };
 
@@ -216,15 +233,13 @@ export async function logout() {
 
 export async function validate(formData: formData) {
   try {
-
-    if (formData.type=='store') {
+    if (formData.type == "store") {
       StoreSchema.parse(formData);
-    }
-    else {
+    } else {
       UserSchema.parse(formData);
     }
     return { valid: true, errors: [] };
-  } catch (err:any) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       const refinedErrors = err.errors.reduce((acc, curr) => {
         acc[curr.path[0]] = curr.message;
@@ -232,7 +247,7 @@ export async function validate(formData: formData) {
       }, {} as { [key: string]: string });
       return { valid: false, errors: refinedErrors };
     }
-    return { valid: false, errors: err.message };
+    return { valid: false, errors: "Unknown Error Occured" };
   }
 }
 export const verifyUser = async (
@@ -389,10 +404,8 @@ export async function refreshAccessToken(email: string) {
     });
 
     return { refreshed: true, access_token: access_token, error: "" };
-  } catch (error) {
-    console.error(
-      "Error refreshing access token:"
-    );
+  } catch {
+    console.error("Error refreshing access token:");
     return {
       refreshed: false,
       access_token: "",
@@ -437,7 +450,7 @@ export const checkReCAPTCHA = async (
     } else {
       return { success: false, message: data["error-codes"] };
     }
-  } catch (error) {
-    return { success: false, message: 'error' };
+  } catch {
+    return { success: false, message: "error" };
   }
 };

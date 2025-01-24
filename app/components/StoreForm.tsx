@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { showToast } from "@/app/components/Notification/Toast";
 import axios from "axios";
 const BasicStoreForm = () => {
@@ -101,7 +101,7 @@ const BasicStoreForm = () => {
     );
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(validateForm());
     if (validateForm()) {
@@ -128,7 +128,7 @@ const BasicStoreForm = () => {
 
  
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
     if (name === "phone") {

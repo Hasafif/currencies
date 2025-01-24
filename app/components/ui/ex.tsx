@@ -57,11 +57,3 @@ export const Badge = ({
 };
 
 
-
-export default {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  Badge
-};

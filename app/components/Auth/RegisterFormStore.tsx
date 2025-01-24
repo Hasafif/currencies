@@ -67,7 +67,7 @@ export default function RegisterForm() {
   };
   const handleBlur = async () => {
     const valid = await validate(formData);
-    setErrorMsg(valid.errors);
+    setErrorMsg(valid.errors as unknown as formData);
     setValidity(valid.valid)
   };
 

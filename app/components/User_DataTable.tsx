@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, ArrowUpDown } from 'lucide-react';
+import { Item } from '../lib/types';
 
 /// Define generic type for table data
 type SortDirection = 'asc' | 'desc' | null;
@@ -73,9 +74,8 @@ export default function User_DataTable<T extends { id: string }>({
   const isMobile = windowWidth < 640;
  
 
-  const formatValue = (value: any, type: ColumnType) => {
+  const formatValue = (value: string | number, type: ColumnType) => {
     if (value === null || value === undefined) return '-';
-    
     switch (type) {
       case 'datetime':
         return new Date(value).toLocaleString();
@@ -164,7 +164,7 @@ export default function User_DataTable<T extends { id: string }>({
               </tr>
             ) :(isSearching && filtered_data.length !=0)?
             (
-              filtered_data.slice(startIndex, endIndex).map((item: any) => (
+              filtered_data.slice(startIndex, endIndex).map((item:Item) => (
                 <tr
                   key={item.id}
                   className="hover:bg-gray-50 transition-colors"
@@ -183,7 +183,7 @@ export default function User_DataTable<T extends { id: string }>({
               ))
             ):
             (
-              data.slice(startIndex, endIndex).map((item: any) => (
+              data.slice(startIndex, endIndex).map((item: Item) => (
                 <tr
                   key={item.id}
                   className="hover:bg-gray-50 transition-colors"

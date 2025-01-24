@@ -21,7 +21,7 @@ export default function VerifyHandler() {
       }
     }
     verify();
-  }, []);
+  });
   async function handleReset() {
     const refresh = await refreshUserToken((email as string))
     if(!refresh.success){

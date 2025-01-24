@@ -6,63 +6,11 @@ import axios from "axios";
 
 import { showToast } from "../components/Notification/Toast";
 import { Column } from "./User_DataTable";
+import { bulletin, Store } from "../lib/types";
 
-
-
-interface currency {
-  id: string;
-  name: string;
-  store_name: string;
-  state: string;
-  city: string;
-  sale_price: GLfloat;
-  purchase_price: GLfloat;
-  date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  bulletin: bulletin[];
-}
-interface bulletin {
-  id: string;
-  store: Store;
-  storeid: string;
-  date: Date;
-  state: string;
-  city: string;
-  products: currency[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-interface Store {
-  id: string;
-  name: string;
-  state: string;
-  city: string;
-  address: string;
-  email: string;
-  phone: string;
-  currencies: string;
-  bulletin: bulletin[];
-  createdAt: Date;
-}
 export interface Price {
   id: string;
-  name: string;
-  date?: Date;
-  sale_price: GLfloat;
-  sale_std: GLfloat;
-  purchase_price: GLfloat;
-  purchase_std: GLfloat;
-  max_sale_price?: GLfloat;
-  max_purchase_price?: GLfloat;
-  min_sale_price?: GLfloat;
-  min_purchase_price?: GLfloat;
-  sale_percentageChange?: GLfloat;
-  purchase_percentageChange?: GLfloat;
-  state?: string;
-  city?: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  [key: string]: string | GLfloat | Store | bulletin[] | Date;
 }
 
 // Column definitions
@@ -88,8 +36,7 @@ export default function Prices() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setsearch] = useState(false);
   const [pricename, setPricename] = useState("");
-  
-  
+
   //const [socket_state, setSocket_state] = useState('try connecting...');
   //const [socket, setSocket] = useState(null);
 
@@ -151,7 +98,7 @@ export default function Prices() {
       setIsLoading(false);
     };
     getbulletins();
-  }, [prices,setPrices]);
+  }, [prices, setPrices]);
   useEffect(() => {
     if (search) {
       setsearch(true);
@@ -169,7 +116,7 @@ export default function Prices() {
         console.log(filteredPrices);
       }
     }
-  }, [setPricename, pricename, setsearch, search,prices]);
+  }, [setPricename, pricename, setsearch, search, prices]);
   /*useEffect(() => {
       const socket: Socket = io();
       socket.on('updates', (updates:any) => {

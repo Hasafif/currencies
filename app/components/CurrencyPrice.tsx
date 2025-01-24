@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import Card  from '@/app/components/ui/card';
 import axios from 'axios';
-import { Price } from './prices';
 
 // Type definitions
 interface CurrencyPrice {

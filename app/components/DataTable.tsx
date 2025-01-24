@@ -1,9 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus, Trash2, Search, ArrowUpDown } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Plus,
+  Trash2,
+  Search,
+  ArrowUpDown,
+} from "lucide-react";
+import { Item } from "../lib/types";
 
 // Define generic type for table data
-type SortDirection = 'asc' | 'desc' | null;
-type ColumnType = 'string' | 'number' | 'datetime' | 'Store' | 'currency []' | 'bulletin []' | 'bulletin';
+type SortDirection = "asc" | "desc" | null;
+type ColumnType =
+  | "string"
+  | "number"
+  | "datetime"
+  | "Store"
+  | "currency []"
+  | "bulletin []"
+  | "bulletin";
 
 export interface Column {
   key: string;
@@ -18,14 +35,14 @@ interface TableProps<T> {
   filtered_data: T[];
   itemsPerPage?: number;
   onAdd?: () => void;
-  onDelete?: (item: T) => void;
+  onDelete?: (item: Item) => void;
   onSort?: (key: string, direction: SortDirection) => void;
   onSearch?: (searchTerm: string) => void;
   isLoading?: boolean;
   isSearching?: boolean;
 }
 
-export default function DataTable<T extends { id: string}>({
+export default function DataTable<T extends { id: string }>({
   columns,
   data,
   filtered_data,
@@ -35,20 +52,25 @@ export default function DataTable<T extends { id: string}>({
   onSort,
   onSearch,
   isLoading = false,
-  isSearching = true
+  isSearching = true,
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: SortDirection }>({
-    key: '',
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: SortDirection;
+  }>({
+    key: "",
     direction: null,
   });
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 0
+  );
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -56,11 +78,11 @@ export default function DataTable<T extends { id: string}>({
   const endIndex = startIndex + itemsPerPage;
 
   const handleSort = (key: string) => {
-    let direction: SortDirection = 'asc';
-    
+    let direction: SortDirection = "asc";
+
     if (sortConfig.key === key) {
-      if (sortConfig.direction === 'asc') direction = 'desc';
-      else if (sortConfig.direction === 'desc') direction = null;
+      if (sortConfig.direction === "asc") direction = "desc";
+      else if (sortConfig.direction === "desc") direction = null;
     }
 
     setSortConfig({ key, direction });
@@ -74,16 +96,15 @@ export default function DataTable<T extends { id: string}>({
   };
 
   const isMobile = windowWidth < 640;
- 
 
-  const formatValue = (value: number|string, type: ColumnType) => {
-    if (value === null || value === undefined) return '-';
-    
+  const formatValue = (value: number | string, type: ColumnType) => {
+    if (value === null || value === undefined) return "-";
+
     switch (type) {
-      case 'datetime':
+      case "datetime":
         return new Date(value).toLocaleString();
-      case 'number':
-        return typeof value === 'number' ? value.toLocaleString() : value;
+      case "number":
+        return typeof value === "number" ? value.toLocaleString() : value;
       default:
         return value;
     }
@@ -94,7 +115,10 @@ export default function DataTable<T extends { id: string}>({
       {/* Header with search and add button */}
       <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={18}
+          />
           <input
             type="text"
             placeholder="Search..."
@@ -123,7 +147,7 @@ export default function DataTable<T extends { id: string}>({
                 <th
                   key={column.key}
                   className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                    column.sortable ? 'cursor-pointer select-none' : ''
+                    column.sortable ? "cursor-pointer select-none" : ""
                   }`}
                   onClick={() => column.sortable && handleSort(column.key)}
                 >
@@ -134,10 +158,10 @@ export default function DataTable<T extends { id: string}>({
                         size={14}
                         className={`transition-transform ${
                           sortConfig.key === column.key
-                            ? sortConfig.direction === 'asc'
-                              ? 'text-blue-600 rotate-0'
-                              : 'text-blue-600 rotate-180'
-                            : 'text-gray-400'
+                            ? sortConfig.direction === "asc"
+                              ? "text-blue-600 rotate-0"
+                              : "text-blue-600 rotate-180"
+                            : "text-gray-400"
                         }`}
                       />
                     )}
@@ -166,7 +190,7 @@ export default function DataTable<T extends { id: string}>({
                   No data available
                 </td>
               </tr>
-            ) : (isSearching && filtered_data.length ===0)? (
+            ) : isSearching && filtered_data.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length + (onDelete ? 1 : 0)}
@@ -175,9 +199,8 @@ export default function DataTable<T extends { id: string}>({
                   No data available
                 </td>
               </tr>
-            ) :(isSearching && filtered_data.length !=0)?
-            (
-              filtered_data.slice(startIndex, endIndex).map((item: any) => (
+            ) : isSearching && filtered_data.length != 0 ? (
+              filtered_data.slice(startIndex, endIndex).map((item: Item) => (
                 <tr
                   key={item.id}
                   className="hover:bg-gray-50 transition-colors"
@@ -186,7 +209,7 @@ export default function DataTable<T extends { id: string}>({
                     <td
                       key={column.key}
                       className={`px-6 py-4 whitespace-nowrap ${
-                        column.type === 'number' ? 'text-right' : 'text-left'
+                        column.type === "number" ? "text-right" : "text-left"
                       }`}
                     >
                       {formatValue(item[column.key], column.type)}
@@ -204,9 +227,8 @@ export default function DataTable<T extends { id: string}>({
                   )}
                 </tr>
               ))
-            ):
-            (
-              data.slice(startIndex, endIndex).map((item: any) => (
+            ) : (
+              data.slice(startIndex, endIndex).map((item: Item) => (
                 <tr
                   key={item.id}
                   className="hover:bg-gray-50 transition-colors"
@@ -215,7 +237,7 @@ export default function DataTable<T extends { id: string}>({
                     <td
                       key={column.key}
                       className={`text-black px-6 py-4 whitespace-nowrap ${
-                        column.type === 'number' ? 'text-right' : 'text-left'
+                        column.type === "number" ? "text-right" : "text-left"
                       }`}
                     >
                       {formatValue(item[column.key], column.type)}
@@ -242,7 +264,7 @@ export default function DataTable<T extends { id: string}>({
       {data.length > 0 && (
         <div className="px-4 py-3 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="text-sm text-gray-700">
-            Showing {startIndex + 1} to {Math.min(endIndex, data.length)} of{' '}
+            Showing {startIndex + 1} to {Math.min(endIndex, data.length)} of{" "}
             {data.length} entries
           </div>
           <div className="flex items-center gap-2">
@@ -278,8 +300,8 @@ export default function DataTable<T extends { id: string}>({
                         onClick={() => setCurrentPage(page)}
                         className={`min-w-[32px] h-8 rounded-md ${
                           currentPage === page
-                            ? 'bg-blue-600 text-white'
-                            : 'hover:bg-gray-100'
+                            ? "bg-blue-600 text-white"
+                            : "hover:bg-gray-100"
                         }`}
                       >
                         {page}

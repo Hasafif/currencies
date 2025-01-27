@@ -69,7 +69,7 @@ async function handler(req: NextRequest) {
   console.log(prices);
   if (prices)
     return NextResponse.json({ ok: true, prices: prices }, { status: 200 });
-  return NextResponse.json({ message: "Internal Error" }, { status: 500 });
+  return NextResponse.json({ message: "Internal Error" }, { status: 404 });
 }
 
 export { handler as POST, handler as GET };

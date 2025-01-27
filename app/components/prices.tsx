@@ -10,9 +10,28 @@ import { bulletin, Store } from "../lib/types";
 
 export interface Price {
   id: string;
-  [key: string]: string | GLfloat | Store | bulletin[] | Date;
+  [key: string]: string | GLfloat | Store | bulletin[] | Date | null;
 }
-
+/*
+export interface Price {
+  id: string;
+  name: string;
+  date: Date | null;
+  sale_price: GLfloat;
+  sale_std: GLfloat;
+  purchase_price: GLfloat;
+  purchase_std: GLfloat;
+  sale_percentageChange: GLfloat | null;
+  purchase_percentageChange: GLfloat | null;
+  max_sale_price: GLfloat | null;
+  min_sale_price: GLfloat | null;
+  max_purchase_price: GLfloat | null;
+  min_purchase_price: GLfloat | null;
+  state: string | null;
+  city: string | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+}*/
 // Column definitions
 const columns: Column[] = [
   { key: "id", label: "ID", type: "string", sortable: true },

@@ -1,6 +1,6 @@
 import { db } from "@/app/lib/db";
 import { Currency} from "@/app/lib/types";
-
+import { mean_price, mean_state_price } from "@/app/lib/modifiers";
 import { NextRequest, NextResponse } from "next/server";
 interface mean {
   sale_mean: number;
@@ -38,12 +38,13 @@ const get_last = async (name: string, state: string, city: string) => {
     prices = dbPrices.map((price) => ({
       sale_price: price.sale_price,
       purchase_price: price.purchase_price,
+      id:price.id
     }));
     i = i + 1;
     now.setDate(now.getDate() - i);
     startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   }
-
+  console.log(prices)
   return prices;
 };
 const calculate_mean = (prices: Currency[]) => {
@@ -162,7 +163,9 @@ async function handler(req: NextRequest) {
     purchase_percentageChange,
     purchase_std,
     sale_std,
-    limits;
+    limits,
+    mean_price_all,
+    mean_price_state;
   const products = [];
   for (const c of currencies) {
     console.log(c);
@@ -197,13 +200,6 @@ async function handler(req: NextRequest) {
     }));
     mean = calculate_mean(all);
     console.log(mean);
-    /*prices = await db.price.findMany({where:{
-            name:c.name,state:state,city:city, date:{
-              gte: startOfDay,
-              lte: endOfDay
-            }
-          }
-          })*/
     prices = await get_last(c.name, state, city);
     console.log(prices);
     sale_std = Number(mean.sale_stdDev.toFixed(2));
@@ -240,6 +236,7 @@ async function handler(req: NextRequest) {
     purchase_std = Number(mean.purchase_stdDev.toFixed(2));
     limits = calculate_limits(mean, sale_std, purchase_std);
     if (prices.length != 0) {
+      console.log(prices)
       sale_percentageChange =
         (100 * (mean.sale_mean - prices[0].sale_price)) / mean.sale_mean;
       purchase_percentageChange =
@@ -286,6 +283,12 @@ async function handler(req: NextRequest) {
         },
       });
     }
+    
+    mean_price_all = await mean_price(c.name)
+    if (!mean_price_all)  return NextResponse.json({ message: "Internal Error" }, { status: 500 });
+    mean_price_state = mean_state_price(c.name,state);
+    if (!mean_price_state)  return NextResponse.json({ message: "Internal Error" }, { status: 500 });
+
   }
   console.log(products.length);
   const store = await db.store.findMany({
@@ -303,9 +306,9 @@ async function handler(req: NextRequest) {
   console.log("m");
   console.log(refcite);
   console.log(price);
-
+  
   if (refcite && price) return NextResponse.json({ ok: true }, { status: 200 });
-
+  
   return NextResponse.json({ message: "Internal Error" }, { status: 500 });
 }
 

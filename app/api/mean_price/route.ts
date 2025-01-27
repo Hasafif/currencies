@@ -1,7 +1,7 @@
 import { Price } from "@/app/components/prices";
 import { db } from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-const get_last = async () => {
+const get_last = async (currency_name:string) => {
   let prices: Price[] = [];
   let i = 0;
   const now = new Date();
@@ -18,6 +18,8 @@ const get_last = async () => {
   while (prices.length == 0 && i < 6) {
     prices = await db.price.findMany({
       where: {
+        name:currency_name,
+        state:'all',
         date: {
           gte: startOfDay,
           lte: endOfDay,
@@ -31,41 +33,21 @@ const get_last = async () => {
   }
   return prices;
 };
+
 async function handler(req: NextRequest) {
-  const { type } = await req.json();
-  let stores, bulletins, currencies, prices;
-  console.log(type);
-  if (!type) {
+  const { currency_name } = await req.json();
+  console.log(currency_name);
+  if (!currency_name) {
     return NextResponse.json(
       { message: "Invalid parameters" },
       { status: 400 }
     );
   }
 
-  if (type == "stores") {
-    stores = await db.store.findMany();
-    console.log(stores);
-    if (stores)
-      return NextResponse.json({ ok: true, stores: stores }, { status: 200 });
-  } else if (type == "bulletins") {
-    bulletins = await db.bulletin.findMany();
-    console.log(bulletins);
-    if (bulletins)
-      return NextResponse.json(
-        { ok: true, bulletins: bulletins },
-        { status: 200 }
-      );
-  } else if (type == "currencies") {
-    currencies = await db.currency.findMany();
-    console.log(currencies);
-    if (currencies)
-      return NextResponse.json(
-        { ok: true, currencies: currencies },
-        { status: 200 }
-      );
-  } else if (type == "prices") {
-    prices = await get_last();
-  }
+
+    const prices = await get_last(currency_name);
+ 
+  
   console.log(prices);
   if (prices)
     return NextResponse.json({ ok: true, prices: prices }, { status: 200 });

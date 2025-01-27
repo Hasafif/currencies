@@ -160,7 +160,7 @@ const BulletinForm = () => {
       };
       console.log(validateForm());
       console.log("Bulletin data:", bulletinData);
-      const resp = await axios.post("http://localhost:3000/api/add_bulletin", {
+      const resp = await axios.post("/api/add_bulletin", {
         storeName: bulletinData.storeName,
         state: bulletinData.state,
         city: bulletinData.city,
@@ -178,7 +178,7 @@ const BulletinForm = () => {
   };
   useEffect(() => {
     const getbulletins = async () => {
-      const res = await axios.post("http://localhost:3000/api/stores", {
+      const res = await axios.post("/api/stores", {
         type: "prices",
       });
       console.log(res.data.prices);

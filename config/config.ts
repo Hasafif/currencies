@@ -4,7 +4,7 @@ export const googleProvider = {
     client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
   },
   urls: {
-    redirect_uri: "http://localhost:3000/api/auth/callback",
+    redirect_uri: "/api/auth/callback",
     auth_url: "https://accounts.google.com/o/oauth2/v2/auth",
     token_url: "https://oauth2.googleapis.com/token",
     user_info_url: "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -24,8 +24,7 @@ export const reCAPTCHA = {
 };
 export const main_urls = {
   //origin :'https://chatg6.ai',
-  origin :'http://localhost:3000',
+  origin: "",
   //backendUrl: "https://api.chatg6.ai",
   backendUrl: "http://127.0.0.1:8000",
-}
-
+};

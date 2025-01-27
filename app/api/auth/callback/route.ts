@@ -107,7 +107,7 @@ async function handler(req: Request) {
     });
     (await cookies()).set("session", session, { expires, httpOnly: true });
     
-    return Response.redirect('http://localhost:3000/');
+    return Response.redirect('/');
   } catch (error) {
     return Response.json({ error: error }, { status: 500 });
   }

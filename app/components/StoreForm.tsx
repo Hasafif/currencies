@@ -11,8 +11,6 @@ const BasicStoreForm = () => {
     phone: "",
   });
 
-
-
   const [errors, setErrors] = useState({
     storeName: "",
     state: "",
@@ -108,7 +106,7 @@ const BasicStoreForm = () => {
       console.log("Form submitted:", formData);
       // Handle form submission here
     }
-    const resp = await axios.post("http://localhost:3000/api/add_store", {
+    const resp = await axios.post("/api/add_store", {
       name: formData.storeName,
       state: formData.state,
       city: formData.city,
@@ -126,9 +124,9 @@ const BasicStoreForm = () => {
     }
   };
 
- 
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
 
     if (name === "phone") {

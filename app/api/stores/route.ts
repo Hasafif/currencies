@@ -41,7 +41,7 @@ async function handler(req: NextRequest) {
       { status: 400 }
     );
   }
-
+ try {
   if (type == "stores") {
     stores = await db.store.findMany();
     console.log(stores);
@@ -70,6 +70,12 @@ async function handler(req: NextRequest) {
   if (prices)
     return NextResponse.json({ ok: true, prices: prices }, { status: 200 });
   return NextResponse.json({ message: "Internal Error" }, { status: 500 });
+} catch (error:unknown) {
+console.log(error)
+return NextResponse.json({ message: error}, { status: 200 });
+};
+
+{}
 }
 
 export { handler as POST, handler as GET };

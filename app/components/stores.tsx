@@ -63,6 +63,7 @@ export default function Stores() {
     const getstores = async () => {
         const res = await axios.post('http://localhost:3000/api/stores',{type:'stores'})
           console.log(res.data.stores)
+          console.log(res.status)
         setStores(res.data.stores);
           setIsLoading(false);
     };

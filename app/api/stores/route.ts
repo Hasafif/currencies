@@ -72,7 +72,7 @@ async function handler(req: NextRequest) {
   return NextResponse.json({ message: "Internal Error" }, { status: 500 });
 } catch (error:unknown) {
 console.log(error)
-return NextResponse.json({ message: error}, { status: 200 });
+return NextResponse.json({message:process.env.DATABASE_URL}, { status: 200 });
 };
 
 {}

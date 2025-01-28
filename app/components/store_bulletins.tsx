@@ -8,7 +8,6 @@ import { showToast } from "../components/Notification/Toast";
 import { Column } from "./User_DataTable";
 import { bulletin } from "../lib/types";
 
-
 // Column definitions
 const columns: Column[] = [
   { key: "id", label: "ID", type: "string", sortable: true },
@@ -67,7 +66,7 @@ export default function Store_Bulletins() {
 
   useEffect(() => {
     const getbulletins = async () => {
-      const res = await axios.post("http://localhost:3000/api/stores", {
+      const res = await axios.post("/api/stores", {
         type: "bulletins",
       });
       console.log(res.data.bulletins);
@@ -75,7 +74,7 @@ export default function Store_Bulletins() {
       setIsLoading(false);
     };
     getbulletins();
-  }, [bulletins,setBulletins]);
+  }, [bulletins, setBulletins]);
   useEffect(() => {
     if (search) {
       setsearch(true);
@@ -89,7 +88,7 @@ export default function Store_Bulletins() {
       //else {
       //  setfiltered_Bulletins(filteredBulletins);}
     }
-  }, [setBulletinname, bulletinname, setsearch, search,bulletins]);
+  }, [setBulletinname, bulletinname, setsearch, search, bulletins]);
   return (
     <>
       <DataTable<bulletin>

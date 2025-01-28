@@ -6,7 +6,6 @@ import axios from "axios";
 import User_DataTable from "./User_DataTable";
 import { Column } from "./DataTable";
 
-
 interface currency {
   id: string;
   name: string;
@@ -84,14 +83,13 @@ export default function User_Prices() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setsearch] = useState(false);
   const [pricename, setPricename] = useState("");
- 
-  
+
   //const [socket_state, setSocket_state] = useState('try connecting...');
   //const [socket, setSocket] = useState(null);
 
   /*useEffect(() => {
       //fetch('api/pages');
-      const s = io('http://localhost:3000', {
+      const s = io('', {
         path: "/api/pages"
       });
       setSocket(s);
@@ -102,7 +100,6 @@ export default function User_Prices() {
         setSocket_state('connected successfully 👍');
       });
     }*/
-  
 
   const handleSort = () => {
     // Handle sort logic
@@ -118,7 +115,7 @@ export default function User_Prices() {
 
   useEffect(() => {
     const getbulletins = async () => {
-      const res = await axios.post("http://localhost:3000/api/stores", {
+      const res = await axios.post("/api/stores", {
         type: "prices",
       });
       console.log(res.data.prices);
@@ -126,7 +123,7 @@ export default function User_Prices() {
       setIsLoading(false);
     };
     getbulletins();
-  }, [prices,setPrices]);
+  }, [prices, setPrices]);
   useEffect(() => {
     if (search) {
       setsearch(true);
@@ -144,7 +141,7 @@ export default function User_Prices() {
         console.log(filteredPrices);
       }
     }
-  }, [setPricename, pricename, setsearch, search,prices]);
+  }, [setPricename, pricename, setsearch, search, prices]);
   /*useEffect(() => {
       const socket: Socket = io();
       socket.on('updates', (updates:any) => {

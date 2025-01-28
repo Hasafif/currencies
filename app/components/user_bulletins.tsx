@@ -59,7 +59,6 @@ export default function User_Bulletins() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setsearch] = useState(false);
   const [bulletinname, setBulletinname] = useState("");
-  
 
   const handleSort = () => {
     // Handle sort logic
@@ -74,7 +73,7 @@ export default function User_Bulletins() {
 
   useEffect(() => {
     const getbulletins = async () => {
-      const res = await axios.post("http://localhost:3000/api/stores", {
+      const res = await axios.post("/api/stores", {
         type: "bulletins",
       });
       console.log(res.data.bulletins);
@@ -82,7 +81,7 @@ export default function User_Bulletins() {
       setIsLoading(false);
     };
     getbulletins();
-  }, [bulletins,setBulletins]);
+  }, [bulletins, setBulletins]);
   useEffect(() => {
     if (search) {
       setsearch(true);
@@ -91,12 +90,12 @@ export default function User_Bulletins() {
       //const filteredBulletins = bulletins.filter(bulletin => bulletin.store.name === bulletinname);
       bulletins.forEach((bulletin) => console.log(bulletin));
       // if (filteredBulletins.length==0 && (bulletinname== ' '|| bulletinname== ' '|| bulletinname=='')) {
-      setfiltered_Bulletins(bulletins)
+      setfiltered_Bulletins(bulletins);
       // }
       //else {
       //  setfiltered_Bulletins(filteredBulletins);}
     }
-  }, [setBulletinname, bulletinname, setsearch, search,bulletins]);
+  }, [setBulletinname, bulletinname, setsearch, search, bulletins]);
   return (
     <>
       <User_DataTable<bulletin>
@@ -109,9 +108,6 @@ export default function User_Bulletins() {
         isLoading={isLoading}
         isSearching={search}
       />
- 
-
-  
     </>
   );
 }

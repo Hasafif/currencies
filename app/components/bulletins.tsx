@@ -4,10 +4,8 @@ import DataTable from "../components/DataTable";
 import axios from "axios";
 import BulletinForm from "../components/BulletinForm";
 import { showToast } from "../components/Notification/Toast";
-import {Column} from "../components/DataTable";
+import { Column } from "../components/DataTable";
 import { bulletin } from "../lib/types";
-
-
 
 // Column definitions
 const columns: Column[] = [
@@ -67,7 +65,7 @@ export default function Bulletins() {
 
   useEffect(() => {
     const getbulletins = async () => {
-      const res = await axios.post("http://localhost:3000/api/stores", {
+      const res = await axios.post("/api/stores", {
         type: "bulletins",
       });
       console.log(res.data.bulletins);
@@ -89,7 +87,7 @@ export default function Bulletins() {
       //else {
       //  setfiltered_Bulletins(filteredBulletins);}
     }
-  }, [setBulletinname, bulletinname, setsearch, search,bulletins]);
+  }, [setBulletinname, bulletinname, setsearch, search, bulletins]);
   return (
     <>
       <DataTable<bulletin>

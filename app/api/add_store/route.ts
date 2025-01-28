@@ -22,7 +22,6 @@ async function handler(req: NextRequest) {
         }
       })
       if(refcite)return NextResponse.json({ok:true},{status:200})
-       
         return NextResponse.json({message:'Internal Error'},{status:500})
     }
 

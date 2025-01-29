@@ -41,41 +41,42 @@ async function handler(req: NextRequest) {
       { status: 400 }
     );
   }
- try {
-  if (type == "stores") {
-    stores = await db.store.findMany();
-    console.log(stores);
-    if (stores)
-      return NextResponse.json({ ok: true, stores: stores }, { status: 200 });
-  } else if (type == "bulletins") {
-    bulletins = await db.bulletin.findMany();
-    console.log(bulletins);
-    if (bulletins)
-      return NextResponse.json(
-        { ok: true, bulletins: bulletins },
-        { status: 200 }
-      );
-  } else if (type == "currencies") {
-    currencies = await db.currency.findMany();
-    console.log(currencies);
-    if (currencies)
-      return NextResponse.json(
-        { ok: true, currencies: currencies },
-        { status: 200 }
-      );
-  } else if (type == "prices") {
-    prices = await get_last();
+  try {
+    if (type == "stores") {
+      stores = await db.store.findMany();
+      console.log(stores);
+      if (stores)
+        return NextResponse.json({ ok: true, stores: stores }, { status: 200 });
+    } else if (type == "bulletins") {
+      bulletins = await db.bulletin.findMany();
+      console.log(bulletins);
+      if (bulletins)
+        return NextResponse.json(
+          { ok: true, bulletins: bulletins },
+          { status: 200 }
+        );
+    } else if (type == "currencies") {
+      currencies = await db.currency.findMany();
+      console.log(currencies);
+      if (currencies)
+        return NextResponse.json(
+          { ok: true, currencies: currencies },
+          { status: 200 }
+        );
+    } else if (type == "prices") {
+      prices = await get_last();
+    }
+    console.log(prices);
+    if (prices)
+      return NextResponse.json({ ok: true, prices: prices }, { status: 200 });
+    return NextResponse.json({ message: "Internal Error" }, { status: 500 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: error }, { status: 200 });
   }
-  console.log(prices);
-  if (prices)
-    return NextResponse.json({ ok: true, prices: prices }, { status: 200 });
-  return NextResponse.json({ message: "Internal Error" }, { status: 500 });
-} catch (error:unknown) {
-console.log(error)
-return NextResponse.json({message:error}, { status: 200 });
-};
 
-{}
+  {
+  }
 }
 
 export { handler as POST, handler as GET };

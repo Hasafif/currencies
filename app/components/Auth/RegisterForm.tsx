@@ -6,7 +6,7 @@ import { formData } from "../../lib/types";
 import { useState } from "react";
 import GoogleProvider from "./providers/GoogleProvider";
 import { useMsg } from "@/context/MsgContext";
-import Captcha from "./Recaptcha";
+// import Captcha from "./Recaptcha";
 
 
 export default function RegisterForm() {
@@ -159,7 +159,7 @@ export default function RegisterForm() {
         </form>
         <GoogleProvider />
       </section>
-      <Captcha action="homepage" />
+      { /* <Captcha action="homepage" /> */}
     </section>
   );
 }

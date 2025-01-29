@@ -65,7 +65,7 @@ export default function Stores() {
 
   useEffect(() => {
     const getstores = async () => {
-        const res = await axios.post('http://localhost:3000/api/stores',{type:'stores'})
+        const res = await axios.post('/api/stores',{type:'stores'})
           console.log(res.data.stores)
         setStores(res.data.stores);
           setIsLoading(false);

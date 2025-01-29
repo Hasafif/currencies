@@ -48,7 +48,9 @@ const BulletinForm = () => {
     );
   };
 
-  const handleStoreInfoChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleStoreInfoChange = (
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     if (e.target) {
       const { name, value } = e.target;
       setStoreInfo((prev) => ({
